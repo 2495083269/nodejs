@@ -6,7 +6,7 @@ const expressJoi = require('@escook/express-joi')
 const { reg_login_schame } = require('../schame/user')
 
 const router = express.Router()
-// 3. 添加验证规则中间件
+// 3. 添加验证规则中间件 注册新用户
 router.post('/reguser',expressJoi(reg_login_schame), user_handler.reguser )
 
 router.post('/login',expressJoi(reg_login_schame), user_handler.login )

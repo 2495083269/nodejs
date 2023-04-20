@@ -45,7 +45,7 @@ exports.login = (req, res) => {
     // 接收表单数据
     const userInfo = req.body
     // 剔除用户的隐私信息
-    const user = {...userInfo,password:'',user_pic:''}
+    const user = {...userInfo,password:''}
     // 定义sql语句
     const sqlStr = 'select * from user where username=?'
     db.query(sqlStr,userInfo.username,(err,results) => {
@@ -53,17 +53,17 @@ exports.login = (req, res) => {
         if (results.length !== 1) {
             return res.cc('登录失败！')
         }
-        // 判断密码是否一致
+        // 判断密码是否一致 bcrypt.compareSync对加密密码进行判断
         const comperResult = bcrypt.compareSync(userInfo.password,results[0].password)
         if (!comperResult) return res.cc("密码错误，登录失败！")
-        // res.send('login OK')
-        
-        // 在服务器端生成token
+
+        // 在服务器端生成token,将获取不到的id加入进去
+        user.id = results[0].id
         const token = jwt.sign(user,config.jwtSecretKey,{expiresIn: config.tokenTime})
         res.send({
             status: 0,
             message: '登录成功！',
-            token:  token
+            token: 'Bearer ' + token
         })
     })
 }

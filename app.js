@@ -1,4 +1,5 @@
 const express = require('express')
+// 导入解决跨域的文件
 const cors = require('cors')
 // 导入 Joi 来定义验证规则
 const Joi = require('joi')
@@ -35,6 +36,9 @@ app.use(jwt({secret: config.jwtSecretKey,
 // 导入并使用路由模块
 const userRouter = require('./router/user')
 app.use('/api',userRouter)
+// 导入userinfo路由模块
+const userInfoRouter = require('./router/userInfo')
+app.use('/my',userInfoRouter)
 
 // 4.1 错误级别中间件
 app.use(function (err, req, res, next) {
